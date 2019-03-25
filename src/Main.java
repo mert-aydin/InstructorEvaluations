@@ -16,6 +16,9 @@ import java.util.Set;
 
 public class Main {
 
+    private static ArrayList<Section> sections = new ArrayList<>();
+    static int maxLength = 0;
+
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
@@ -32,7 +35,6 @@ public class Main {
 
         ArrayList<String> instructorNames = new ArrayList<>();
         ArrayList<Double> sectionGPAs = new ArrayList<>();
-        ArrayList<String> combined = new ArrayList<>();
 
         for (Object o : array) {
 
@@ -46,7 +48,6 @@ public class Main {
         Set<String> namesSet = new HashSet<>(instructorNames);
         int secCount = 0;
         double sum = 0;
-        int maxLength = 0;
         for (String name : namesSet) {
 
             ArrayList<Double> GPAs = new ArrayList<>();
@@ -60,27 +61,62 @@ public class Main {
                 }
             }
 
-            combined.add(name + ": % " + " ! " + String.format("%.16f", sum / secCount) + " ! " + " ?" + secCount + "? " + "#" + calculateSD(GPAs));
+            sections.add(new Section(name, sum / secCount, secCount, calculateSD(GPAs)));
+
             secCount = 0;
             sum = 0;
 
         }
 
-        combined.sort((o1, o2) -> {
+        System.out.print("Sort by gpa(1), # of sections(2), standard deviation(3), standard error(4): ");
+        int sortBy = scanner.nextInt();
+        if (!(sortBy == 1 || sortBy == 2 || sortBy == 3 || sortBy == 4)) {
+            System.out.println("Invalid sorting criteria. Sorting by gpa.");
+        }
 
-            String a = o1.substring(o1.indexOf("!") + 2, o1.lastIndexOf("!") - 1);
-            String b = o2.substring(o2.indexOf("!") + 2, o2.lastIndexOf("!") - 1);
-            return Double.compare(Double.parseDouble(b), Double.parseDouble(a));
+        sections.sort((o1, o2) -> {
+
+            switch (sortBy) {
+
+                default:
+                case 1:
+                    double gpa1 = o1.getGpa();
+                    double gpa2 = o2.getGpa();
+                    return Double.compare(gpa2, gpa1);
+
+                case 2:
+                    int secCount1 = o1.getSecCount();
+                    int secCount2 = o2.getSecCount();
+                    return Integer.compare(secCount2, secCount1);
+
+                case 3:
+                    double SD1 = o1.getSD();
+                    double SD2 = o2.getSD();
+                    return Double.compare(SD1, SD2);
+
+                case 4:
+                    SD1 = o1.getSD();
+                    SD2 = o2.getSD();
+                    secCount1 = o1.getSecCount();
+                    secCount2 = o2.getSecCount();
+
+                    double se1 = SD1 / Math.sqrt(secCount1);
+                    double se2 = SD2 / Math.sqrt(secCount2);
+
+                    return Double.compare(se1, se2);
+
+            }
 
         });
 
-        int i = 1;
-        for (String s : combined) {
-            System.out.printf("%5s", i++ + ". ");
-            System.out.printf("%-" + (maxLength + 2) + "s", s.substring(0, s.indexOf("%")));
-            System.out.printf("\"%4.2f\" ", Double.parseDouble(s.substring(s.indexOf("!") + 1, s.lastIndexOf("!"))));
-            System.out.printf("%5s", "\"" + s.substring(s.indexOf("?") + 1, s.lastIndexOf("?")) + "\" ");
-            System.out.printf("\"%4.2f\"\n", Double.parseDouble(s.substring(s.indexOf("#") + 1)));
+        System.out.printf("%-" + (Main.maxLength + 7) + "s", "Instructor Name");
+        System.out.printf("%4s", "GPA");
+        System.out.printf("%6s", "#");
+        System.out.printf("%6s", "SD");
+        System.out.printf("%15s\n", "SE");
+
+        for (int i = 0; i < sections.size(); i++) {
+            System.out.println(String.format("%3d. ", i + 1) + sections.get(i));
         }
 
     }
