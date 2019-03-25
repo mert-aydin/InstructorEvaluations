@@ -31,6 +31,10 @@ public class Main {
 
         int course = scanner.nextInt();
 
+        System.out.print("Sort by gpa(1), # of sections(2), standard deviation(3), standard error(4): ");
+
+        int sortBy = scanner.nextInt();
+
         JSONArray array = fetchHtml2String(dept, course);
 
         ArrayList<String> instructorNames = new ArrayList<>();
@@ -68,8 +72,7 @@ public class Main {
 
         }
 
-        System.out.print("Sort by gpa(1), # of sections(2), standard deviation(3), standard error(4): ");
-        int sortBy = scanner.nextInt();
+
         if (!(sortBy == 1 || sortBy == 2 || sortBy == 3 || sortBy == 4)) {
             System.out.println("Invalid sorting criteria. Sorting by gpa.");
         }
