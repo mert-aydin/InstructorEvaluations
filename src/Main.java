@@ -18,6 +18,8 @@ public class Main {
 
     private static ArrayList<Section> sections = new ArrayList<>();
     static int maxLength = 0;
+    private static int course;
+    private static String dept;
 
     public static void main(String[] args) throws IOException {
 
@@ -25,17 +27,17 @@ public class Main {
 
         System.out.print("Dept code: ");
 
-        String dept = scanner.next().toUpperCase();
+        dept = scanner.next().toUpperCase();
 
         System.out.print("Course code: ");
 
-        int course = scanner.nextInt();
+        course = scanner.nextInt();
 
         System.out.print("Sort by gpa(1), # of sections(2), standard deviation(3), standard error(4): ");
 
         int sortBy = scanner.nextInt();
 
-        JSONArray array = fetchHtml2String(dept, course);
+        JSONArray array = fetchHtml2String();
 
         ArrayList<String> instructorNames = new ArrayList<>();
         ArrayList<Double> sectionGPAs = new ArrayList<>();
@@ -158,7 +160,7 @@ public class Main {
         return Math.sqrt(standardDeviation / length);
     }
 
-    private static JSONArray fetchHtml2String(String dept, int course) throws IOException {
+    private static JSONArray fetchHtml2String() throws IOException {
 
         URLConnection connection = new URL("https://stars.bilkent.edu.tr/evalreport/index.php?mode=crs&crsCode=" + dept + "&crsNum=" + course).openConnection();
         Scanner scanner = new Scanner(connection.getInputStream());
@@ -179,7 +181,12 @@ public class Main {
             System.out.println("No sections found!");
             System.exit(0);
         }
-        cname = cname.substring(18, cname.lastIndexOf(")") - 11);
+        try {
+            cname = cname.substring(18, cname.lastIndexOf(")") - 11);
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("Malformed evaluations page! See " + "https://stars.bilkent.edu.tr/evalreport/index.php?mode=crs&crsCode=" + dept + "&crsNum=" + course);
+            System.exit(0);
+        }
         System.out.println(cname);
         JSONArray array = new JSONArray();
         boolean firstRow = true;
