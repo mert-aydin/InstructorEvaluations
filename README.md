@@ -10,13 +10,13 @@ Check overall GPAs of a course by its instructors who have offered it before in 
 
 **Sorting criteria:** Decide how you'd like to sort the results.
 
-1: Sort by gpa
+**1:** Sort by gpa
 
-2: Sort by number of sections offered
+**2:** Sort by number of sections offered
 
-3: Sort by standard deviation
+**3:** Sort by standard deviation
 
-4: Sort by standard error
+**4:** Sort by standard error
 
 ### Output format
 Instructor's name, average gpa of the instructor, # of sections the instructor has offered, standard deviation and standard error.
