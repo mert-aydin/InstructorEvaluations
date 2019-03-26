@@ -28,9 +28,9 @@ public class Section {
     public String toString() {
         String output = "";
         output += String.format("%-" + (Main.maxLength + 2) + "s", name + ": ");
-        output += String.format("\"%.2f\"", gpa);
+        output += String.format("\"%.3f\"", gpa);
         output += String.format("%5s", "\"" + secCount + "\"");
-        output += String.format(" \"%.2f\"", SD);
+        output += String.format(" \"%.3f\"", SD);
         output += String.format(" \"%.18f\"", SD / Math.sqrt(secCount));
 
         return output;

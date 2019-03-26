@@ -112,13 +112,30 @@ public class Main {
 
         });
 
+        double courseGPASum = 0;
+        int totalSecCount = 0;
+
+        for (Section section : sections) {
+            courseGPASum += section.getGpa() * section.getSecCount();
+            totalSecCount += section.getSecCount();
+        }
+
+        double courseMean = courseGPASum / totalSecCount;
+
+        System.out.println("Course average: " + courseMean);
+
         System.out.printf("%-" + (Main.maxLength + 7) + "s", "Instructor Name");
-        System.out.printf("%4s", "GPA");
+        System.out.printf("%5s", "GPA");
         System.out.printf("%6s", "#");
         System.out.printf("%6s", "SD");
-        System.out.printf("%15s\n", "SE");
+        System.out.printf("%16s\n", "SE");
 
+        boolean infoPrinted = false;
         for (int i = 0; i < sections.size(); i++) {
+            if (sections.get(i).getGpa() < courseMean && !infoPrinted && !(sortBy == 2 || sortBy == 3 || sortBy == 4)) {
+                System.out.println("Following instructors have lower averages than the course's overall average");
+                infoPrinted = true;
+            }
             System.out.println(String.format("%3d. ", i + 1) + sections.get(i));
         }
 
@@ -155,6 +172,15 @@ public class Main {
 
     private static JSONArray table2Json(String source) throws JSONException {
         Document doc = Jsoup.parse(source);
+        String cname = "";
+        try {
+            cname = doc.select("h2").first().toString();
+        } catch (NullPointerException e) {
+            System.out.println("No sections found!");
+            System.exit(0);
+        }
+        cname = cname.substring(18, cname.lastIndexOf(")") - 11);
+        System.out.println(cname);
         JSONArray array = new JSONArray();
         boolean firstRow = true;
         for (Element table : doc.select("table")) {
