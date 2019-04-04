@@ -24,7 +24,7 @@ Instructor's name, average gpa of the instructor, # of sections the instructor h
 ![Screen Shot 2019-03-26 at 13 52 44](https://user-images.githubusercontent.com/22095755/54991999-3951d680-4fcf-11e9-848c-c32f68415a89.png)
 
 ## How to Run
-[Download .jar file.](https://github.com/mertaydinbilkent/InstructorEvaluations/raw/master/InstructorEvaluations.jar)
+[Download .jar file.](https://github.com/mertaydinbilkent/InstructorEvaluations/raw/master/InstructorEvaluations.jar) (Java 12 or higher is required.)
 
 In your terminal, run following command:
 ```
