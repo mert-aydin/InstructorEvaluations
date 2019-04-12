@@ -198,6 +198,9 @@ public class Main {
                 }
                 JSONObject jsonObject = new JSONObject();
                 Elements tds = row.select("td");
+                if (tds.get(5).text().equals("0.00")) {
+                    continue;
+                }
                 String gpa = tds.get(4).text();
                 String name = tds.get(6).text();
 
